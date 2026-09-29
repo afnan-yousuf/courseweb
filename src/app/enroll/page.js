@@ -66,7 +66,7 @@ function EnrollmentFormContent() {
 
   if (submitted) {
     return (
-      <div className="max-w-md mx-auto mt-16 p-8 bg-white rounded-xl shadow-sm text-center">
+      <div className="max-w-md mx-auto mt-16 p-8 backdrop-blur-md bg-white/70 border border-white/40 rounded-2xl shadow-2xl text-center">
         <div className="text-green-600 text-5xl mb-4">✓</div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Enrollment Submitted!</h2>
         <p className="text-gray-600 mb-6">
@@ -79,7 +79,7 @@ function EnrollmentFormContent() {
             setStudentPhone("");
             setStudentEmail("");
           }}
-          className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition"
+          className="bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition shadow-md"
         >
           Submit Another Enrollment
         </button>
@@ -89,7 +89,7 @@ function EnrollmentFormContent() {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-12">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <div className="backdrop-blur-md bg-white/70 border border-white/40 rounded-2xl p-8 shadow-2xl">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Student Enrollment Form</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -98,7 +98,7 @@ function EnrollmentFormContent() {
               value={selectedCourseId}
               onChange={(e) => setSelectedCourseId(e.target.value)}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white/60 border border-white/50 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800"
             >
               <option value="">-- Choose a Course --</option>
               {courses.map((c) => (
@@ -117,7 +117,7 @@ function EnrollmentFormContent() {
               onChange={(e) => setStudentName(e.target.value)}
               required
               placeholder="John Doe"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white/60 border border-white/50 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-400"
             />
           </div>
 
@@ -129,7 +129,7 @@ function EnrollmentFormContent() {
               onChange={(e) => setStudentPhone(e.target.value)}
               required
               placeholder="+1 (555) 000-0000"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white/60 border border-white/50 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-400"
             />
           </div>
 
@@ -141,13 +141,13 @@ function EnrollmentFormContent() {
               onChange={(e) => setStudentEmail(e.target.value)}
               required
               placeholder="john@example.com"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-white/60 border border-white/50 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-400"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-lg hover:bg-indigo-700 transition mt-2"
+            className="w-full bg-indigo-600 text-white font-medium py-3 rounded-xl hover:bg-indigo-700 transition shadow-lg mt-2"
           >
             Complete Enrollment
           </button>
@@ -159,7 +159,7 @@ function EnrollmentFormContent() {
 
 export default function EnrollPage() {
   return (
-    <Suspense fallback={<div className="text-center py-12">Loading...</div>}>
+    <Suspense fallback={<div className="text-center py-12 text-white">Loading...</div>}>
       <EnrollmentFormContent />
     </Suspense>
   );
