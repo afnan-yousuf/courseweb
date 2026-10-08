@@ -99,6 +99,7 @@ export default function LoginPage() {
             name="password"
             type="password"
             value={form.password}
+            className="bg-white p-1"
             onChange={handleChange}
             required
             style={{
