@@ -1,8 +1,21 @@
 "use client";
-
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
+  const router = useRouter();
+
+
+    const logout = async () => {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      router.push("/login");
+      router.refresh();
+    };
+  
+
   const [activeTab, setActiveTab] = useState("courses");
 
   const [courses, setCourses] = useState([]);
@@ -99,12 +112,22 @@ export default function AdminDashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-white drop-shadow-sm">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold text-white drop-shadow-sm">
+          Admin Dashboard
+        </h1>
+        <button
+          className="text-indigo-600 hover:text-indigo-700 transition font-semibold"
+          onClick={logout}
+        >
+          Logout
+        </button>
         <div className="flex space-x-2 backdrop-blur-md bg-white/40 border border-white/40 p-1 rounded-xl shadow-md">
           <button
             onClick={() => setActiveTab("courses")}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-              activeTab === "courses" ? "bg-white text-indigo-600 shadow-md" : "text-gray-700 hover:text-white"
+              activeTab === "courses"
+                ? "bg-white text-indigo-600 shadow-md"
+                : "text-gray-700 hover:text-white"
             }`}
           >
             Manage Courses
@@ -112,7 +135,9 @@ export default function AdminDashboard() {
           <button
             onClick={() => setActiveTab("enrollments")}
             className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-              activeTab === "enrollments" ? "bg-white text-indigo-600 shadow-md" : "text-gray-700 hover:text-white"
+              activeTab === "enrollments"
+                ? "bg-white text-indigo-600 shadow-md"
+                : "text-gray-700 hover:text-white"
             }`}
           >
             Student Enrollments
@@ -123,10 +148,14 @@ export default function AdminDashboard() {
       {activeTab === "courses" ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="backdrop-blur-md bg-white/70 border border-white/40 p-6 rounded-2xl shadow-xl h-fit">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Add New Course</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">
+              Add New Course
+            </h2>
             <form onSubmit={handleAddCourse} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Course Name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Course Name
+                </label>
                 <input
                   type="text"
                   value={courseName}
@@ -137,7 +166,9 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Duration
+                </label>
                 <input
                   type="text"
                   value={courseDuration}
@@ -148,7 +179,9 @@ export default function AdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Fee ($)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Fee ($)
+                </label>
                 <input
                   type="number"
                   value={courseFee}
@@ -169,7 +202,9 @@ export default function AdminDashboard() {
 
           <div className="lg:col-span-2 backdrop-blur-md bg-white/70 border border-white/40 rounded-2xl shadow-xl overflow-hidden">
             <div className="px-6 py-4 border-b border-white/30">
-              <h2 className="text-lg font-bold text-gray-900">Course Catalog</h2>
+              <h2 className="text-lg font-bold text-gray-900">
+                Course Catalog
+              </h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-sm">
@@ -193,10 +228,19 @@ export default function AdminDashboard() {
                     courses
                       .filter((c) => !c.is_Deleted)
                       .map((course) => (
-                        <tr key={course.course_id} className="hover:bg-white/40 transition">
-                          <td className="p-4 font-medium text-gray-900">{course.course_name}</td>
-                          <td className="p-4 text-gray-700">{course.course_duration}</td>
-                          <td className="p-4 text-gray-700">${course.course_fee}</td>
+                        <tr
+                          key={course.course_id}
+                          className="hover:bg-white/40 transition"
+                        >
+                          <td className="p-4 font-medium text-gray-900">
+                            {course.course_name}
+                          </td>
+                          <td className="p-4 text-gray-700">
+                            {course.course_duration}
+                          </td>
+                          <td className="p-4 text-gray-700">
+                            ${course.course_fee}
+                          </td>
                           <td className="p-4">
                             <span
                               className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -210,7 +254,12 @@ export default function AdminDashboard() {
                           </td>
                           <td className="p-4 text-right space-x-2">
                             <button
-                              onClick={() => toggleCourseStatus(course.course_id, course.is_Active)}
+                              onClick={() =>
+                                toggleCourseStatus(
+                                  course.course_id,
+                                  course.is_Active,
+                                )
+                              }
                               className="text-indigo-700 hover:underline font-medium"
                             >
                               {course.is_Active ? "Deactivate" : "Activate"}
@@ -233,7 +282,9 @@ export default function AdminDashboard() {
       ) : (
         <div className="backdrop-blur-md bg-white/70 border border-white/40 rounded-2xl shadow-xl overflow-hidden">
           <div className="px-6 py-4 border-b border-white/30">
-            <h2 className="text-lg font-bold text-gray-900">Enrolled Students</h2>
+            <h2 className="text-lg font-bold text-gray-900">
+              Enrolled Students
+            </h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-sm">
@@ -254,28 +305,41 @@ export default function AdminDashboard() {
                   </tr>
                 ) : (
                   enrollments.map((en) => (
-                    <tr key={en.enrollment_id} className="hover:bg-white/40 transition">
+                    <tr
+                      key={en.enrollment_id}
+                      className="hover:bg-white/40 transition"
+                    >
                       <td className="p-4">
-                        <div className="font-medium text-gray-900">{en.student_name}</div>
-                        <div className="text-xs text-gray-500">ID: {en.student_id}</div>
+                        <div className="font-medium text-gray-900">
+                          {en.student_name}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          ID: {en.student_id}
+                        </div>
                       </td>
                       <td className="p-4 text-gray-700">
                         <div>{en.student_email}</div>
-                        <div className="text-xs text-gray-500">{en.student_phone}</div>
+                        <div className="text-xs text-gray-500">
+                          {en.student_phone}
+                        </div>
                       </td>
-                      <td className="p-4 font-medium text-indigo-700">{en.course_name}</td>
+                      <td className="p-4 font-medium text-indigo-700">
+                        {en.course_name}
+                      </td>
                       <td className="p-4">
                         <select
                           value={en.status}
-                          onChange={(e) => handleStatusChange(en.enrollment_id, e.target.value)}
+                          onChange={(e) =>
+                            handleStatusChange(en.enrollment_id, e.target.value)
+                          }
                           className={`border rounded-xl px-3 py-1.5 text-xs font-semibold focus:outline-none backdrop-blur-md ${
                             en.status === "Pending"
                               ? "bg-yellow-100/70 text-yellow-800 border-yellow-300"
                               : en.status === "Booked"
-                              ? "bg-blue-100/70 text-blue-800 border-blue-300"
-                              : en.status === "In Progress"
-                              ? "bg-purple-100/70 text-purple-800 border-purple-300"
-                              : "bg-green-100/70 text-green-800 border-green-300"
+                                ? "bg-blue-100/70 text-blue-800 border-blue-300"
+                                : en.status === "In Progress"
+                                  ? "bg-purple-100/70 text-purple-800 border-purple-300"
+                                  : "bg-green-100/70 text-green-800 border-green-300"
                           }`}
                         >
                           <option value="Pending">Pending</option>

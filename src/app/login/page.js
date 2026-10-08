@@ -1,80 +1,126 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { use, useState } from "react";
 
-export default function login() {
+export default function LoginPage() {
   const router = useRouter();
-  const [formdata, setFormData] = useState({ uname: "", pass: "", age: 0 });
-  const [message, setMessage] = useState("");
 
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
-  async function handlesubmit(e) {
-    e.preventDefault();
+  const [error, setError] = useState("");
+  const [loading, setLoading] =
+    useState(false);
+
+  const handleChange = (event) => {
+    setForm({
+      ...form,
+      [event.target.name]:
+        event.target.value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formdata),
-      });
-      const data = await res.json();
-      if (data.success) {
-        router.push("/admin");
-      } else {
-        setMessage("Invalid Username or Password");
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(
+        "/api/auth/login",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify(form),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
       }
-    } catch (err) {
-      console.error(err);
+
+      router.push("/students");
+      router.refresh();
+
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <>
-      <h1>Login here</h1>
-      <div className="w-100">
-        <form className="flex flex-col gap-2" onSubmit={handlesubmit}>
-          Username:
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "100px auto",
+      }}
+    >
+      <h1>Login</h1>
+
+      {error && (
+        <p style={{ color: "red" }}>
+          {error}
+        </p>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: 15 }}>
+          <label>Email</label>
+
           <input
-            type="text"
-            className="bg-white p-1"
-            value={formdata.uname}
-            name="uname"
-            onChange={(e) => {
-              setFormData({ ...formdata, [e.target.name]: e.target.value });
-            }}
-            onFocus={() => {
-              setMessage("");
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            style={{
+              width: "100%",
+              padding: 10,
             }}
           />
-          Password:{" "}
+        </div>
+
+        <div style={{ marginBottom: 15 }}>
+          <label>Password</label>
+
           <input
+            name="password"
             type="password"
-            className="bg-white p-1"
-            value={formdata.pass}
-            name="pass"
-            onChange={(e) => {
-              setFormData({ ...formdata, [e.target.name]: e.target.value });
-            }}
-            onFocus={() => {
-              setMessage("");
+            value={form.password}
+            onChange={handleChange}
+            required
+            style={{
+              width: "100%",
+              padding: 10,
             }}
           />
-          <input
-            type="number"
-            className="bg-white p-1"
-            value={formdata.age}
-            name="age"
-            onChange={(e) => {
-              setFormData({ ...formdata, [e.target.name]: e.target.value });
-            }}
-          />
-          <button className="bordered px-3 py-2 bg-white text-black">
-            Login
-          </button>
-        </form>
-        <h1 className="text-xl">{message}</h1>
-      </div>
-    </>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "100%",
+            padding: 12,
+          }}
+        >
+          {loading
+            ? "Logging in..."
+            : "Login"}
+        </button>
+      </form>
+    </div>
   );
 }
